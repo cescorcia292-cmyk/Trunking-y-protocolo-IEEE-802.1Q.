@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trunking y protocolo IEEE 802.1Q - Camilo Escorcia</title>
+<link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+<header>
+<h1>Trunking y protocolo IEEE 802.1Q</h1>
+<p>Trabajo académico de redes de computadores</p>
+<p><strong>Camilo Escorcia</strong></p>
+</header>
+
+<nav>
+<a href="#inicio">Inicio</a>
+<a href="#introduccion">Introducción</a>
+<a href="#desarrollo">Desarrollo</a>
+<a href="#ejemplos">Ejemplos</a>
+<a href="#conclusiones">Conclusiones</a>
+</nav>
+
+<main>
+<section id="inicio">
+<h2>Presentación</h2>
+<p>El trunking es una técnica fundamental en las redes Ethernet modernas porque permite transportar información perteneciente a diferentes VLAN a través de un mismo enlace físico. Para identificar cada VLAN se utiliza normalmente el estándar IEEE 802.1Q, que agrega información de etiquetado a las tramas Ethernet.</p>
+
+<div class="diagram">
+<div class="device">Switch 1<br>VLAN 10, 20, 30</div>
+<div class="line"></div>
+<div class="device">Enlace TRUNK<br>IEEE 802.1Q</div>
+<div class="line"></div>
+<div class="device">Switch 2<br>VLAN 10, 20, 30</div>
+</div>
+</section>
+
+<section id="introduccion">
+<h2>Introducción</h2>
+<p>En una organización es común necesitar varias redes lógicas dentro de una misma infraestructura física. Las VLAN permiten separar el tráfico y mejorar la administración de la red. Sin embargo, cuando dos switches deben compartir varias VLAN, sería poco práctico utilizar un cable independiente para cada una. El trunking soluciona este problema permitiendo transportar múltiples VLAN por un único enlace.</p>
+
+<p>El estándar IEEE 802.1Q define un mecanismo de etiquetado de tramas para indicar a qué VLAN pertenece cada trama que atraviesa un enlace troncal. De esta manera, los switches pueden mantener la separación lógica de las redes mientras utilizan la misma conexión física.</p>
+
+<div class="card"><strong>Importancia:</strong> el trunking permite aprovechar mejor los enlaces, facilita la expansión de redes y hace posible que una misma VLAN exista en diferentes switches.</div>
+</section>
+
+<section id="desarrollo">
+<h2>Desarrollo</h2>
+
+<h3>¿Qué es una VLAN?</h3>
+<p>Una VLAN (Virtual Local Area Network) es una red lógica creada dentro de una infraestructura física. Permite agrupar dispositivos independientemente de su ubicación física y separar dominios de broadcast.</p>
+
+<h3>¿Qué es un puerto trunk?</h3>
+<p>Un puerto trunk es un puerto configurado para transportar tráfico de varias VLAN. A diferencia de un puerto de acceso, que normalmente pertenece a una sola VLAN, el trunk utiliza etiquetas para distinguir las diferentes redes.</p>
+
+<h3>IEEE 802.1Q</h3>
+<p>IEEE 802.1Q es el estándar utilizado para etiquetar tramas Ethernet con información relacionada con la VLAN. La etiqueta permite que los equipos de red sepan a qué VLAN corresponde cada trama mientras atraviesa el enlace troncal.</p>
+
+<h3>Ventajas</h3>
+<ul>
+<li>Permite transportar varias VLAN por un solo enlace.</li>
+<li>Reduce la cantidad de conexiones físicas necesarias.</li>
+<li>Facilita la administración y expansión de la red.</li>
+<li>Mantiene separadas las redes lógicas.</li>
+<li>Permite conectar switches de forma eficiente.</li>
+</ul>
+
+<h3>Desventajas y consideraciones</h3>
+<ul>
+<li>Una mala configuración puede provocar problemas de conectividad.</li>
+<li>Es necesario controlar qué VLAN pueden atravesar el trunk.</li>
+<li>La configuración requiere conocimientos básicos de VLAN y switching.</li>
+<li>Una falla en el enlace troncal puede afectar varias VLAN simultáneamente.</li>
+</ul>
+
+<h3>Componentes principales</h3>
+<table>
+<tr><th>Elemento</th><th>Función</th></tr>
+<tr><td>VLAN</td><td>Divide lógicamente la red.</td></tr>
+<tr><td>Puerto de acceso</td><td>Conecta normalmente un dispositivo a una VLAN.</td></tr>
+<tr><td>Puerto trunk</td><td>Transporta múltiples VLAN.</td></tr>
+<tr><td>Etiqueta 802.1Q</td><td>Identifica la VLAN de una trama.</td></tr>
+<tr><td>Switch</td><td>Administra y reenvía las tramas de la red.</td></tr>
+</table>
+
+<h3>Ejemplo de configuración Cisco</h3>
+<code>Switch(config)# interface gigabitEthernet 0/1
+Switch(config-if)# switchport mode trunk
+Switch(config-if)# switchport trunk allowed vlan 10,20,30
+Switch(config-if)# no shutdown</code>
+
+<p>En este ejemplo, la interfaz GigabitEthernet 0/1 se configura como trunk y se permite el transporte de las VLAN 10, 20 y 30. La configuración exacta puede variar según el modelo y sistema operativo del switch.</p>
+</section>
+
+<section id="ejemplos">
+<h2>Ejemplos prácticos</h2>
+
+<h3>Escenario con tres VLAN</h3>
+<table>
+<tr><th>VLAN</th><th>Nombre</th><th>Uso</th></tr>
+<tr><td>10</td><td>Administración</td><td>Personal administrativo</td></tr>
+<tr><td>20</td><td>Estudiantes</td><td>Equipos de estudiantes</td></tr>
+<tr><td>30</td><td>Invitados</td><td>Dispositivos externos</td></tr>
+</table>
+
+<p>Si dos switches tienen estas tres VLAN, un enlace trunk puede transportar simultáneamente el tráfico de las VLAN 10, 20 y 30. El etiquetado 802.1Q permite identificar cada trama y conservar la separación lógica.</p>
+
+<div class="diagram">
+<div class="device">PC VLAN 10</div>
+<div class="device">PC VLAN 20</div>
+<div class="device">PC VLAN 30</div>
+</div>
+
+<div class="card">
+<strong>Acceso vs. Trunk:</strong> un puerto de acceso está destinado normalmente a una sola VLAN, mientras que un puerto trunk transporta tráfico de múltiples VLAN mediante etiquetado.
+</div>
+
+<h3>Aplicación en una institución</h3>
+<p>Una institución educativa podría utilizar VLAN diferentes para administración, docentes, estudiantes y visitantes. Los switches ubicados en diferentes edificios pueden conectarse mediante enlaces trunk, permitiendo que las VLAN necesarias lleguen a cada zona sin instalar un enlace físico independiente para cada red.</p>
+</section>
+
+<section id="conclusiones">
+<h2>Conclusiones</h2>
+<p>El trunking es una solución eficiente para transportar múltiples VLAN mediante un solo enlace físico. Su funcionamiento está estrechamente relacionado con el estándar IEEE 802.1Q, encargado de identificar las VLAN mediante etiquetas en las tramas Ethernet.</p>
+
+<p>Comprender la diferencia entre puertos de acceso y puertos trunk es esencial para configurar correctamente una red conmutada. Una implementación adecuada permite aprovechar mejor la infraestructura, mantener la segmentación lógica y facilitar el crecimiento de la red.</p>
+
+<p>En conclusión, IEEE 802.1Q y el trunking son tecnologías fundamentales para diseñar redes organizadas, escalables y administrables.</p>
+</section>
+</main>
+
+<footer>
+<p>© 2026 Camilo Escorcia</p>
+<p>Trunking y protocolo IEEE 802.1Q</p>
+</footer>
+
+</body>
+</html>
